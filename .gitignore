@@ -1,0 +1,12 @@
+# 忽略 VS 的缓存和临时文件夹
+.vs/
+Debug/
+Release/
+x64/
+
+# 忽略 VS 的项目配置文件（如果你只想留 .cpp 的话）
+*.sln
+*.slnx
+*.vcxproj
+*.filters
+*.user
