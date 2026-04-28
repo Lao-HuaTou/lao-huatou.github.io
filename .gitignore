@@ -10,3 +10,7 @@ x64/
 *.vcxproj
 *.filters
 *.user
+# 忽略 Linux 编译生成的无后缀二进制文件
+*
+!*.*
+!*/
