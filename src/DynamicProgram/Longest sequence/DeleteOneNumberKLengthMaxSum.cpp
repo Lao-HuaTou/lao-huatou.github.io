@@ -13,35 +13,6 @@ const int MAXN = 100005;
 int q[MAXN];
 int l, r;
 
-// 暴力方法 - 用于验证
-int lenKmaxSum(const vector<int>& nums, int k) {
-    int n = nums.size();
-    if (n < k) return 0;
-    int ans = INT_MIN;
-    for (int i = 0; i <= n - k; i++) {
-        int cur = 0;
-        for (int j = i, cnt = 0; cnt < k; j++, cnt++) {
-            cur += nums[j];
-        }
-        ans = max(ans, cur);
-    }
-    return ans;
-}
-
-int maxSum1(vector<int> nums, int k) {
-    int n = nums.size();
-    if (n <= k) return 0;
-    int ans = INT_MIN;
-    for (int i = 0; i < n; i++) {
-        vector<int> rest;
-        for (int j = 0; j < n; j++) {
-            if (i != j) rest.push_back(nums[j]);
-        }
-        ans = max(ans, lenKmaxSum(rest, k));
-    }
-    return ans;
-}
-
 // 正式方法 - 时间复杂度 O(N)
 // 核心思想：维护一个长度为 k+1 的窗口，删掉窗口内最小值，剩下的 k 个数累加和最大
 int maxSum2(const vector<int>& nums, int k) {
