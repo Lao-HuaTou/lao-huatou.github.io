@@ -20,9 +20,9 @@ int lengthofLIS1(){
     return ans;
 }
 
-	// 最优解
-	// 时间复杂度O(n * logn)
-    // 如果要求最长不下降子序列 (Non-Decreasing)，只需将 lower_bound 换成 upper_bound
+// 最优解
+// 时间复杂度O(n * logn)
+// 如果要求最长不下降子序列 (Non-Decreasing)，只需将 lower_bound 换成 upper_bound
 // 核心逻辑：ends 数组保持不降序，使用 upper_bound 找到第一个 > num 的位置并替换
 int lengthofLIS2(){
     int len = 0;

@@ -3,81 +3,89 @@
 #include<cmath>
 #include<queue>
 #include<algorithm>
+#include<string>
 using namespace std;
 #define int long long
-int dx[4] = { 0,1,0,-1 };
-int dy[4] = { 1,0,-1,0 };
 
-struct p {
-	int x;
-	int y;
-	int l;
-	int r;
-	int cnt;
-};
+const int N = 2e5 + 5;
 
-
-void solve() {
-	int n, m;
-	cin >> n >> m;
-	int stx, sty;
-	int edx, edy;
-	queue<p> q;
-	vector<vector<char>> mp(n, vector<char>(m));
-	vector<vector<vector<vector<bool>>>> vis(n, vector<vector<vector<bool>>>(m, vector<vector<bool>>(4, vector<bool>(4, 0))));
-	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < m; ++j) {
-			cin >> mp[i][j];
-			if (mp[i][j] == 'S') {
-				stx = i, sty = j;
-			}
-			if (mp[i][j] == 'T') {
-				edx = i, edy = j;
-				mp[i][j] = '.';
-			}
-		}
+vector<pair<int, int>> mat[N];
+int n, q;
+int f[N];
+int deg[N];
+int ans[N];
+void build(int n)
+{
+	for (int i = 0; i <= n;i++){
+		f[i] = 0;
+		deg[i] = 0;
+		ans[i] = 0;
 	}
-	for (int i = 0; i < 4; ++i) {
-		q.push({ stx,sty,i,0,0 });
-		vis[stx][sty][i][0] = 1;
-	}
-	while (!q.empty()) {
-		p tp = q.front();
-		q.pop();
-		if (tp.x == edx && tp.y == edy) {
-			cout << tp.r << endl;
-			return;
-		}
-		for (int i = 0; i < 4; ++i) {
-			int tx, ty;
-			tx = tp.x + dx[i];
-			ty = tp.y + dy[i];
-			if (tx >= 0 && ty >= 0 && tx <n && ty < m && mp[tx][ty] == '.') {
-				if (tp.l == i) {
-					if (tp.cnt < 3 && !vis[tx][ty][i][tp.cnt + 1]) {
-						vis[tx][ty][i][tp.cnt + 1] = 1;
-						q.push({ tx,ty,tp.l,tp.r + 1,tp.cnt + 1 });
-					}
-				}
-				else if (!vis[tx][ty][i][1]) {
-					vis[tx][ty][i][1] = 1;
-					q.push({ tx,ty,i,tp.r + 1,1 });
-				}
-			}
-		}
-	}
-	cout << -1 << endl;
 }
 
-
+void solve()
+{
+	cin >> n >> q;
+	build(n);
+	for (int i = 2; i <= n; i++)
+	{
+		cin >> f[i];
+	}
+	int w;
+	for (int i = 2; i <= n;i++){
+		cin >> w;
+		mat[f[i]].push_back({i, w});
+	}
+	int s = 0;
+	int mod = mat[1].size();
+	while (q--)
+	{
+		cin >> s;
+        int ss=s;
+		int cur = 1;
+		s %= mod;
+		if(ans[ss]){
+			cout << ans[ss] << "\n";
+			continue;
+		}
+		while(mat[cur].size()){
+			cur = mat[cur][s % mat[cur].size()].first;
+			s += mat[cur][s % mat[cur].size()].second;
+		}
+        ans[ss]=cur;
+		cout << cur<<"\n";
+	}
+}
 
 signed main() {
 	ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-	int t;
-	//cin >> t;
-	t = 1;
-	while (t--) {
+	int tt;
+	cin >> tt;
+	tt = 1;
+	while (tt--) {
 		solve();
 	}
 	return 0;
 }
+
+
+
+	// cin >> n >> m;
+	// int D = n + 1;
+	// for (int x = 1; x <= n; x++)
+	// {
+	// 	for (int y = 1; y <= m;y++){
+	// 		cin >> mat[(x - 1) * D + y];//(x,y)
+	// 	}
+	// }
+	// for (int x = 1; x <= n; x++)
+	// {
+	// 	for (int y = 1; y <= m;y++){
+	// 		for (int d = 0; d <= 3;d++){
+	// 			if(d==0){
+	// 				dp[(x-1)*D+y][d]=mat[(x-1)*D+y]=='A':
+	// 			}
+	// 		}
+	// 	}
+	// }
+

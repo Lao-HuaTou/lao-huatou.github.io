@@ -2,8 +2,17 @@
 using namespace std;
 
 class Sales_data{
+    friend istream &read(istream &is, Sales_data &a);//设置友元 使read可以访问private
+    friend ostream &print(ostream &os, const Sales_data &a);
+
 public:
-    string isbn() const {
+    Sales_data() = default;//构造函数
+    Sales_data(const string &s) : bookNo(s){}
+    Sales_data(const string &s,unsigned n,double p):
+            bookNo(s),units_sold(n),revenue(n*p){}
+    Sales_data(istream &);
+    string isbn() const
+    {
         return bookNo;
     }
     Sales_data &combine(const Sales_data &);//返回的是this，不是sale_data 加&
@@ -15,7 +24,31 @@ private://这里存放的是数据。因为在 private 后面
     double revenue = 0.0;//销售总额
     unsigned units_sold = 0;//卖出去的份数
 };
-double Sales_data::avg_price() const{
+
+Sales_data::Sales_data(istream&is){
+    read(is, *this);//this为指针 *解引用为指向对象
+}
+
+Sales_data add(const Sales_data &a,const Sales_data &b){
+    Sales_data sum;
+    sum = a;
+    sum.combine(b);
+    return sum;
+}
+
+istream &read(istream &is,Sales_data &a){
+    double price = 0;
+    is >> a.bookNo >> a.units_sold >> price;
+    a.revenue = price * a.units_sold;
+    return is;
+}
+ostream &print(ostream &os,const Sales_data &a){
+    os << a.isbn() << " " << a.units_sold << " " << a.revenue << " " << a.avg_price();
+    return os;
+}
+
+    double Sales_data::avg_price() const
+{
     if(units_sold){
         return revenue / units_sold;
     }
